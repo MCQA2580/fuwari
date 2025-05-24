@@ -6,8 +6,12 @@ export async function getSortedPosts() {
 	const allBlogPosts = await getCollection("posts", ({ data }) => {
 		return import.meta.env.PROD ? data.draft !== true : true;
 	});
-
 	const sorted = allBlogPosts.sort((a, b) => {
+		// 如果一个是置顶一个不是置顶，置顶的排在前面
+		if (a.data.pinned !== b.data.pinned) {
+			return a.data.pinned ? -1 : 1;
+		}
+		// 都是置顶或都不是置顶，按发布日期排序
 		const dateA = new Date(a.data.published);
 		const dateB = new Date(b.data.published);
 		return dateA > dateB ? -1 : 1;
