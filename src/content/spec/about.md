@@ -1,7 +1,11 @@
 # 关于
 Fuwari牛逼，我这辈子都不会改博客框架了。 
 
-关于AcoFork的其他站点：[LinkMe](https://link.me/acofork)
+IP站点（实验性）： 
+ 
+- https://sbgfw.afo.im （302）
+
+- https://46.232.60.28:44444 （直链）
 
 ::github{repo="saicaca/fuwari"}
 
