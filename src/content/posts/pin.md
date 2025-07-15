@@ -1,6 +1,6 @@
 ---
 title: "加群向导&其他网站&常见问题"
-image: "https://sb-r2.afo.im/assets/pin.webp"
+image: "https://php.afo.im/ri/?img=h"
 published: 2025-05-24
 pinned: true
 category: '置顶'
@@ -21,6 +21,10 @@ description: 关于如何联系二叉树树~
 # 其他网站
 
 [六子棋 - Python](https://sixqi.afo.im)
+
+[二次元随机图 - 竖屏](https://php.afo.im/ri/?img=v)
+
+[二次元随机图 - 横屏](https://php.afo.im/ri/?img=h)
 
 ---
 
