@@ -3,7 +3,7 @@
 category: 随笔
 description: 会用Netlify，家宽建站不是梦！
 draft: false
-image: https://eo-r2.afo.im/myblog/img/image.png
+image: https://eo-r2.2x.nz/myblog/img/image.png
 lang: ''
 published: 2025-04-04
 tags: [Netlify, Vercel]

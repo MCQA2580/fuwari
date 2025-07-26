@@ -2,7 +2,7 @@
 title: 记录人生中第一次破解软件！FKvocechat！
 published: 2025-07-23
 description: '感兴趣的可以先去voce.chat购买一个Pro版本后再阅读此文~本文也是一个使用REST API通信的软件通用的破解教程'
-image: 'https://eo-r2.afo.im/myblog/img/caa0d269-fc78-4352-8d71-0bc33c122ddd.webp'
+image: 'https://eo-r2.2x.nz/myblog/img/caa0d269-fc78-4352-8d71-0bc33c122ddd.webp'
 tags: [破解]
 category: '记录'
 draft: false 
@@ -33,11 +33,11 @@ lang: ''
 
 部署完毕VoceChat后，进入授权界面开启浏览器的DevTools，如图
 
-![](https://eo-r2.afo.im/myblog/img/df39698c-7a0f-4eda-9b74-47cec05faaf2.webp)
+![](https://eo-r2.2x.nz/myblog/img/df39698c-7a0f-4eda-9b74-47cec05faaf2.webp)
 
 设置你的 `BurpSuite` 软件，全局替换 `"sign": false` 为 `"sign": true` 
 
-![](https://eo-r2.afo.im/myblog/img/5d34cbe2-08e9-40ea-95e4-64c976d5de9b.webp)
+![](https://eo-r2.2x.nz/myblog/img/5d34cbe2-08e9-40ea-95e4-64c976d5de9b.webp)
 
 点击手动更新，上传如下内容
 
@@ -47,7 +47,7 @@ LkA5K1paaxyiNckLwYxdektr64uk6zFs322ZAXDp4aQWkTNcY9ztKKFBwpPbonS3TeFTnveHi6w5VR1M
 
 然后你就能得到
 
-![](https://eo-r2.afo.im/myblog/img/07686efa-5646-4116-bb96-c2d856b4811e.webp)
+![](https://eo-r2.2x.nz/myblog/img/07686efa-5646-4116-bb96-c2d856b4811e.webp)
 
 # 原理剖析
 
@@ -71,4 +71,4 @@ VoceChat是前端验证（没绷住），刚才给你们的内容是一个经过
 
 # 那我花350买的授权谁给我补啊🤣
 
-![](https://eo-r2.afo.im/myblog/img/7fd942fe-da57-4496-8b85-e5db6057705b.webp)
+![](https://eo-r2.2x.nz/myblog/img/7fd942fe-da57-4496-8b85-e5db6057705b.webp)
