@@ -9,11 +9,6 @@ tags:
 - 记录
 title: 记录
 ---
-# 关于我的超链接
-
-```html
-<a href="https://link.me/acofork" target="_blank">关于我</a>
-```
 
 # r2.py所需依赖
 
