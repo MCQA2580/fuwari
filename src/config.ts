@@ -9,7 +9,7 @@ import type {
 import { LinkPreset } from "./types/config";
 
 export const siteConfig: SiteConfig = {
-	title: "二叉树树的博客",
+	title: "AcoFork Blog",
 	description:
 		"分享网络技术、服务器部署、内网穿透、静态网站搭建、CDN优化、容器化部署等技术教程与实践经验的个人技术博客，专注于云原生、无服务器架构和前后端开发，作者为afoim/二叉树树",
 
@@ -37,7 +37,7 @@ export const siteConfig: SiteConfig = {
 		"afoim",
 		"afoim Blog",
 		"二叉树树",
-		"二叉树树的博客",
+		"AcoFork Blog",
 
 		// 云服务平台
 		"Cloudflare",

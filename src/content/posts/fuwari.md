@@ -100,7 +100,7 @@ title: Fuwari静态博客搭建教程
      import { LinkPreset } from './types/config'
      
      export const siteConfig: SiteConfig = {
-       title: '二叉树树的博客',
+       title: 'AcoFork Blog',
        subtitle: '爱你所爱！',
        lang: 'zh_CN',         // 'en', 'zh_CN', 'zh_TW', 'ja', 'ko'
        themeColor: {
