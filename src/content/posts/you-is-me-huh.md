@@ -53,4 +53,4 @@ Umami并没有给配置来更改CORS（毕竟这个访问量统计是我逆向�
 
 开源是为了让大家更好的学习我的博客框架，不是让你照搬，请确认将所有内容、API端点、私有服务全部改为自己的后再上线！
 
-你要是懒可以Fork[上游原仓库](https://github.com/saicaca/fuwari)从白纸开始改
+你要是懒可以Fork[上游原仓库](https://github.com/saicaca/fuwari)从白纸开始[改](/posts/fuwari/)
