@@ -1,6 +1,6 @@
 {
     "name": "fuwari",
-    "compatibility_date": "2025-08-13",
+    "compatibility_date": "2025-08-12",
     "assets": {
       "directory": "./dist"
     }
