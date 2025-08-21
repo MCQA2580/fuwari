@@ -11,6 +11,8 @@ lang: ''
 
 > 仅供学习交流，请在下载后24h内删除。体验地址： https://lsky.2x.nz
 
+# 新版本地安装，无需绕过授权！ [点我](/posts/lskypro-local/)
+
 # 下载包体
 
 兰空图床Pro付费版包： https://r2.072103.xyz/lp223.zpaq （解压密码：2x.nz二叉树树）
@@ -99,7 +101,6 @@ export https_proxy="http://127.0.0.1:8080"
 # 自建授权服务器
 
 可以通过Cloudflare Worker自建授权。感谢一位不愿透露姓名的小伙伴提供的代码
-
 
 ```js
 addEventListener('fetch', event => {
