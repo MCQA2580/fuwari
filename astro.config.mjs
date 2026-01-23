@@ -39,10 +39,6 @@ export default defineConfig({
 	trailingSlash: "always",
 	output: "static",
 	redirects: {
-		"/": {
-			status: 302,
-			destination: "https://blog.acofork.com/",
-		},
 		"/long": {
 			status: 302,
 			destination: "https://iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii.iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii.in/",
