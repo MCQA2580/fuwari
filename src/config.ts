@@ -122,7 +122,7 @@ export const profileConfig: ProfileConfig = {
 		{
 			name: "Folo",
 			icon: "folo", // Local icon
-			url: "https://app.folo.is/share/feeds/236818461447222272",
+			url: "https://app.folo.is/share/feeds/245004133358075904",
 		}
 	],
 };
