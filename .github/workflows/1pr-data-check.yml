@@ -1,0 +1,87 @@
+name: PR Data Path Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  check-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check changed files
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const isManual = context.eventName === "workflow_dispatch";
+
+            async function checkPR(pr) {
+              const prNumber = pr.number;
+              console.log(`Checking PR #${prNumber}`);
+
+              const files = await github.paginate(
+                github.rest.pulls.listFiles,
+                {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: prNumber,
+                }
+              );
+
+              let hasFriends = false;
+              let hasSponsors = false;
+
+              for (const file of files) {
+                if (file.filename.startsWith("src/data/friends/")) {
+                  hasFriends = true;
+                }
+                if (file.filename.startsWith("src/data/sponsors/")) {
+                  hasSponsors = true;
+                }
+              }
+
+              const labels = [];
+
+              if (hasFriends) labels.push("友链");
+              if (hasSponsors) labels.push("赞助");
+
+              if (labels.length > 0) {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: prNumber,
+                  labels: labels,
+                });
+
+                console.log(`Added labels ${labels.join(", ")} to PR #${prNumber}`);
+              } else {
+                console.log(`No matching paths in PR #${prNumber}`);
+              }
+            }
+
+            if (isManual) {
+              console.log("Manual trigger: checking all open PRs");
+
+              const prs = await github.paginate(
+                github.rest.pulls.list,
+                {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  state: "open",
+                }
+              );
+
+              for (const pr of prs) {
+                await checkPR(pr);
+              }
+            } else {
+              await checkPR(context.payload.pull_request);
+            }
