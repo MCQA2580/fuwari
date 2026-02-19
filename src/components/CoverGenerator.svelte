@@ -87,6 +87,8 @@
   let dragStartY = 0;
   let initialImageX = 0;
   let initialImageY = 0;
+  let initialPinchDistance = 0;
+  let initialScale = 1;
 
   // Export Config
   let exportConfig = {
@@ -176,31 +178,71 @@
       }
   }
 
-  function handleMouseDown(e: MouseEvent | TouchEvent) {
+  // Pointer state for multi-touch
+  let activePointers = new Map<number, { x: number, y: number }>();
+
+  function handlePointerDown(e: PointerEvent) {
       if (!bgImage) return;
-      isDragging = true;
-      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-      dragStartX = clientX;
-      dragStartY = clientY;
-      initialImageX = bgImageX;
-      initialImageY = bgImageY;
-  }
-
-  function handleMouseMove(e: MouseEvent | TouchEvent) {
-      if (!isDragging) return;
-      e.preventDefault(); // Prevent scrolling on touch
-      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-      const deltaX = clientX - dragStartX;
-      const deltaY = clientY - dragStartY;
       
-      bgImageX = initialImageX + (deltaX / bgImageScale);
-      bgImageY = initialImageY + (deltaY / bgImageScale);
+      // Critical: prevent browser default behavior (scrolling/selection)
+      e.preventDefault();
+      
+      // Capture pointer to track it even outside element
+      (e.currentTarget as Element).setPointerCapture(e.pointerId);
+      
+      activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      
+      if (activePointers.size === 1) {
+          // Single touch/mouse: Drag start
+          isDragging = true;
+          dragStartX = e.clientX;
+          dragStartY = e.clientY;
+          initialImageX = bgImageX;
+          initialImageY = bgImageY;
+      } else if (activePointers.size === 2) {
+          // Multi touch: Pinch start
+          isDragging = false; // Disable drag during pinch
+          const points = Array.from(activePointers.values());
+          initialPinchDistance = Math.hypot(points[1].x - points[0].x, points[1].y - points[0].y);
+          initialScale = bgImageScale;
+      }
   }
 
-  function handleMouseUp() {
-      isDragging = false;
+  function handlePointerMove(e: PointerEvent) {
+      if (!bgImage || !activePointers.has(e.pointerId)) return;
+      e.preventDefault();
+      
+      // Update pointer position
+      activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      
+      if (activePointers.size === 2) {
+          // Pinch Zoom
+          const points = Array.from(activePointers.values());
+          const currentDistance = Math.hypot(points[1].x - points[0].x, points[1].y - points[0].y);
+          
+          if (initialPinchDistance > 0) {
+              const scaleFactor = currentDistance / initialPinchDistance;
+              bgImageScale = Math.max(0.1, Math.min(initialScale * scaleFactor, 10));
+          }
+      } else if (activePointers.size === 1 && isDragging) {
+          // Drag
+          const deltaX = e.clientX - dragStartX;
+          const deltaY = e.clientY - dragStartY;
+          bgImageX = initialImageX + (deltaX / bgImageScale);
+          bgImageY = initialImageY + (deltaY / bgImageScale);
+      }
+  }
+
+  function handlePointerUp(e: PointerEvent) {
+      activePointers.delete(e.pointerId);
+      (e.currentTarget as Element).releasePointerCapture(e.pointerId);
+      
+      if (activePointers.size < 2) {
+          initialPinchDistance = 0;
+      }
+      if (activePointers.size === 0) {
+          isDragging = false;
+      }
   }
   
   function handleWheel(e: WheelEvent) {
@@ -451,12 +493,12 @@
 <div class="flex flex-col items-center gap-8 w-full max-w-6xl mx-auto relative">
   <!-- Preview Area -->
   <div 
-      class="w-full overflow-hidden flex justify-center bg-[var(--card-bg)] p-4 rounded-xl border border-[var(--line-color)] select-none transition-colors duration-300"
-      on:mousemove={handleMouseMove}
-      on:mouseup={handleMouseUp}
-      on:mouseleave={handleMouseUp}
-      on:touchmove={handleMouseMove}
-      on:touchend={handleMouseUp}
+      class="w-full overflow-hidden flex justify-center bg-[var(--card-bg)] p-4 rounded-xl border border-[var(--line-color)] select-none transition-colors duration-300 touch-none"
+      on:pointerdown={handlePointerDown}
+      on:pointermove={handlePointerMove}
+      on:pointerup={handlePointerUp}
+      on:pointercancel={handlePointerUp}
+      on:pointerleave={handlePointerUp}
   >
       <svg 
         bind:this={svgContainer}
@@ -465,8 +507,6 @@
         viewBox="0 0 {canvasWidth} {canvasHeight}"
         xmlns="http://www.w3.org/2000/svg"
         style="max-width: 100%; height: auto; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); cursor: {bgImage ? (isDragging ? 'grabbing' : 'grab') : 'default'};"
-        on:mousedown={handleMouseDown}
-        on:touchstart={handleMouseDown}
         on:wheel={handleWheel}
       >
         <defs>
