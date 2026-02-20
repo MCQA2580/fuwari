@@ -13,23 +13,7 @@
 
 ## 提交拉取请求 (Pull Request)
 
-根据你的需求选择合适的模板：
-
-### 友链/赞助申请
-
-如果你想申请添加友链或赞助信息，请使用此模板：
-
-- [申请友链/赞助](https://github.com/afoim/fuwari/compare/main...main?expand=1&template=friends_sponsors.md)
-
-需要填写：
-- 名称、网站链接、头像链接、描述
-- 赞助金额和日期（赞助申请）
-
-### 源码修改
-
-如果你想修复 Bug、添加功能或改进代码，请使用此模板：
-
-- [提交源码修改](https://github.com/afoim/fuwari/compare/main...main?expand=1&template=source_code.md)
+如果你想修复 Bug、添加功能或改进代码，欢迎提交 PR！
 
 需要填写：
 - 1. 遇到了什么问题？
