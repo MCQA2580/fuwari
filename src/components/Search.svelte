@@ -2,16 +2,16 @@
 import Icon from "@iconify/svelte";
 import { url } from "@utils/url-utils.ts";
 import { onMount } from "svelte";
+import Highlight from "./Highlight.svelte";
 
 interface SearchResult {
 	url: string;
 	meta: {
 		title: string;
-		titleHighlighted: string;
 	};
 	excerpt: string;
 	urlPath?: string;
-	urlPathHighlighted?: string;
+	highlightQuery?: string;
 }
 
 let keywordDesktop = "";
@@ -42,12 +42,6 @@ const setPanelVisibility = (show: boolean, isDesktop: boolean): void => {
 	}
 };
 
-const highlightText = (text: string, keyword: string): string => {
-	if (!keyword) return text;
-	const regex = new RegExp(`(${keyword})`, "gi");
-	return text.replace(regex, "<mark>$1</mark>");
-};
-
 const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 	if (!keyword) {
 		setPanelVisibility(false, isDesktop);
@@ -74,7 +68,6 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 				const contentLower = post.content.toLowerCase();
 				const keywordLower = keyword.toLowerCase();
 				const contentIndex = contentLower.indexOf(keywordLower);
-
 				let excerpt = "";
 				if (contentIndex !== -1) {
 					const start = Math.max(0, contentIndex - 50);
@@ -88,13 +81,10 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 
 				return {
 					url: url(`/posts/${post.link}/`),
-					meta: {
-						title: post.title,
-						titleHighlighted: highlightText(post.title, keyword),
-					},
-					excerpt: highlightText(excerpt, keyword),
+					meta: { title: post.title },
+					excerpt,
 					urlPath: `/posts/${post.link}`,
-					urlPathHighlighted: `/posts/${highlightText(post.link, keyword)}`,
+					highlightQuery: keyword,
 				};
 			});
 
@@ -188,19 +178,30 @@ top-20 left-4 md:left-[unset] right-4 shadow-2xl rounded-2xl p-2">
            class="transition first-of-type:mt-2 lg:first-of-type:mt-0 group block
        rounded-xl text-lg px-3 py-2 hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)]">
             <div class="transition text-90 inline-flex font-bold group-hover:text-[var(--primary)]">
-                {@html item.meta.titleHighlighted}<Icon icon="fa6-solid:chevron-right" class="transition text-[0.75rem] translate-x-1 my-auto text-[var(--primary)]"></Icon>
+                <Highlight text={item.meta.title} query={item.highlightQuery} />
+                <Icon icon="fa6-solid:chevron-right" class="transition text-[0.75rem] translate-x-1 my-auto text-[var(--primary)]"></Icon>
             </div>
             <div class="transition text-xs text-black/50 dark:text-white/50 mb-1 font-mono">
-                            {@html item.urlPathHighlighted}
-                        </div>
+                <Highlight text={item.urlPath} query={item.highlightQuery} />
+            </div>
             <div class="transition text-sm text-50">
-                {@html item.excerpt}
+                <Highlight text={item.excerpt} query={item.highlightQuery} />
             </div>
         </a>
     {/each}
 </div>
 
 <style>
+  :global(.hl) {
+    background-color: var(--primary);
+    color: white;
+    padding: 0 2px;
+    border-radius: 2px;
+  }
+  :global(.hl.no-wrap) {
+    white-space: nowrap;
+    display: inline-block;
+  }
   input:focus {
     outline: 0;
   }
