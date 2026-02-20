@@ -1,6 +1,7 @@
 ---
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { Icon } from "astro-icon/components";
+import ViewsCounter from "@components/ViewsCounter.astro";
 ---
 
 <MainGridLayout title="画廊">
@@ -12,6 +13,7 @@ import { Icon } from "astro-icon/components";
 				</div>
 				<h1 class="text-2xl font-bold text-90">画廊</h1>
 				<div id="status" class="text-sm font-bold text-50 transition-all"></div>
+				<ViewsCounter pathname="/gallery/" />
 			</div>
 			<div class="flex items-center gap-2">
 				<button id="btn-h" type="button" class="btn-regular h-9 px-3 rounded-lg text-sm font-medium">横屏</button>
