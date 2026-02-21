@@ -68,7 +68,7 @@ export async function GET(context: APIContext) {
 			title: post.data.title,
 			description: post.data.description,
 			pubDate: post.data.published,
-			link: `/posts/${post.slug}/`,
+			link: new URL(`posts/${post.slug}/`, context.site).href,
 			// sanitize the new html string with corrected image paths
 			content: sanitizeHtml(html.toString(), {
 				allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),

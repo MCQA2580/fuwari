@@ -81,6 +81,15 @@ import { Icon } from "astro-icon/components";
     import * as Diff from 'diff';
 
     (async function() {
+    const BASE_URL = import.meta.env.BASE_URL || '/';
+    const basePath = String(BASE_URL).endsWith('/') ? String(BASE_URL).slice(0, -1) : String(BASE_URL);
+    const withBasePath = (pathname) => {
+        const p = String(pathname || '');
+        if (!basePath || basePath === '/' || !p.startsWith('/')) return p;
+        if (p === basePath || p.startsWith(`${basePath}/`)) return p;
+        return `${basePath}${p}`;
+    };
+
     const sp = new URLSearchParams(window.location.search);
     if (sp.get('__diff_debug_cleanup') === '1') {
         try {
@@ -336,6 +345,7 @@ import { Icon } from "astro-icon/components";
                     postHref = base.includes('?') ? `${base}&diff=1#post-diff` : `${base}?diff=1#post-diff`;
                 }
             }
+            postHref = withBasePath(postHref);
 
             html += `
             <div class="mb-4 last:mb-0">

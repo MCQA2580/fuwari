@@ -506,6 +506,7 @@ var _hmt = _hmt || [];
 <script>
 import {getHue, getStoredTheme, setHue, setTheme, getBgBlur, setBgBlur, getHideBg, setHideBg} from "../utils/setting-utils";
 import {pathsEqual, url} from "../utils/url-utils";
+import { bindPostInlineDiff } from "../scripts/post-inline-diff";
 import {
 	BANNER_HEIGHT,
 	BANNER_HEIGHT_HOME,
@@ -652,6 +653,7 @@ function init() {
 
 /* Load settings when entering the site */
 init();
+bindPostInlineDiff();
 
 const setup = () => {
 	// TODO: temp solution to change the height of the banner

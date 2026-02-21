@@ -8,6 +8,7 @@
 	const DEBUG_PARAM_KEY = "__diff_debug";
 	const DEBUG_STATE_KEY = "fuwari-diff-debug-state";
 	const CONTEXT_LINES = 2;
+	const BASE_URL = import.meta.env.BASE_URL || "/";
 
 	function normalizeGuid(guid, link) {
 		const value = (guid || link || "").trim();
@@ -35,6 +36,15 @@
 		const noQueryHash = p.split("#")[0].split("?")[0];
 		if (noQueryHash.length > 1) return noQueryHash.replace(/\/+$/, "");
 		return "/";
+	}
+
+	function stripBasePath(pathname) {
+		const base = normalizePathname(BASE_URL);
+		const p = normalizePathname(pathname);
+		if (!base || base === "/") return p;
+		if (p === base) return "/";
+		if (p.startsWith(`${base}/`)) return p.slice(base.length) || "/";
+		return p;
 	}
 
 	function clearInlineDiff(container) {
@@ -601,12 +611,15 @@
 
 		const items = Array.isArray(state?.items) ? state.items : [];
 		const currentPath = normalizePathname(window.location.pathname);
+		const currentStripped = stripBasePath(currentPath);
+		const currentCandidates = new Set([currentPath, currentStripped]);
 
 		const matched = items.find((post) => {
 			if (!post?.isUpdated || !post?.diff) return false;
 			const guidPath = normalizePathname(normalizeGuid(post.guid, post.link));
 			const linkPath = normalizePathname(getRelativePath(post.link));
-			return guidPath === currentPath || linkPath === currentPath;
+			const postCandidates = [guidPath, linkPath, stripBasePath(guidPath), stripBasePath(linkPath)];
+			return postCandidates.some((p) => currentCandidates.has(p));
 		});
 
 		const shouldApply = isDebug || sp.get("diff") === "1" || window.location.hash === "#post-diff";
@@ -648,9 +661,11 @@
 		if (anchor instanceof HTMLElement) anchor.scrollIntoView({ behavior: "smooth", block: "start" });
 	}
 
-	document.addEventListener("DOMContentLoaded", initPostInlineDiff);
-	document.addEventListener("swup:contentReplaced", initPostInlineDiff);
-	window.addEventListener("fuwari:diff-debug-updated", initPostInlineDiff);
+	if (!(window).__fuwariPostInlineDiffBound) {
+		document.addEventListener("DOMContentLoaded", initPostInlineDiff);
+		document.addEventListener("swup:contentReplaced", initPostInlineDiff);
+		window.addEventListener("fuwari:diff-debug-updated", initPostInlineDiff);
+	}
 </script>
 
 <style is:global>
