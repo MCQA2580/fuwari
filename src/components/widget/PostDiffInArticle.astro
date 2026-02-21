@@ -1,0 +1,342 @@
+---
+---
+
+<script>
+	const NOTIFICATION_STATE_KEY = "fuwari-notification-state";
+	const CONTEXT_LINES = 2;
+
+	function normalizeGuid(guid, link) {
+		const value = (guid || link || "").trim();
+		if (!value) return "";
+		try {
+			const url = new URL(value, window.location.origin);
+			return `${url.pathname}${url.search}${url.hash}`;
+		} catch {
+			return value;
+		}
+	}
+
+	function getRelativePath(absoluteUrl) {
+		try {
+			const url = new URL(absoluteUrl, window.location.origin);
+			return `${url.pathname}${url.search}${url.hash}`;
+		} catch {
+			return absoluteUrl;
+		}
+	}
+
+	function normalizePathname(pathname) {
+		const p = String(pathname || "");
+		if (!p) return "/";
+		const noQueryHash = p.split("#")[0].split("?")[0];
+		if (noQueryHash.length > 1) return noQueryHash.replace(/\/+$/, "");
+		return "/";
+	}
+
+	function clearInlineDiff(container) {
+		container.querySelectorAll("[data-post-inline-diff]").forEach((el) => el.remove());
+		container
+			.querySelectorAll("[data-post-inline-diff-add-target]")
+			.forEach((el) => el.removeAttribute("data-post-inline-diff-add-target"));
+		container.querySelectorAll(".post-inline-diff-add-target").forEach((el) => el.classList.remove("post-inline-diff-add-target"));
+	}
+
+	function buildRows(diffParts) {
+		/** @type {{type: 'add'|'del'|'ctx', text: string}[]} */
+		const rows = [];
+
+		for (const part of diffParts) {
+			const type = part?.added ? "add" : part?.removed ? "del" : "ctx";
+			const value = String(part?.value ?? "");
+			const lines = value.split("\n");
+			if (lines.length > 0 && lines[lines.length - 1] === "") lines.pop();
+			for (const line of lines) rows.push({ type, text: line });
+		}
+
+		return rows;
+	}
+
+	function sliceWithContext(rows) {
+		const changeIndexes = [];
+		for (let i = 0; i < rows.length; i += 1) {
+			if (rows[i].type !== "ctx") changeIndexes.push(i);
+		}
+		if (changeIndexes.length === 0) return [];
+
+		const keep = new Array(rows.length).fill(false);
+		for (const idx of changeIndexes) {
+			const start = Math.max(0, idx - CONTEXT_LINES);
+			const end = Math.min(rows.length - 1, idx + CONTEXT_LINES);
+			for (let i = start; i <= end; i += 1) keep[i] = true;
+		}
+
+		/** @type {(typeof rows[number] | {type: 'gap', text: string})[]} */
+		const out = [];
+		let inGap = false;
+		for (let i = 0; i < rows.length; i += 1) {
+			if (keep[i]) {
+				out.push(rows[i]);
+				inGap = false;
+				continue;
+			}
+			if (!inGap) {
+				out.push({ type: "gap", text: "…" });
+				inGap = true;
+			}
+		}
+
+		return out;
+	}
+
+	function toHunks(rowsWithGaps) {
+		/** @type {{type: 'add'|'del'|'ctx', text: string}[][]} */
+		const hunks = [];
+		/** @type {{type: 'add'|'del'|'ctx', text: string}[]} */
+		let current = [];
+
+		for (const row of rowsWithGaps) {
+			if (row.type === "gap") {
+				if (current.length) hunks.push(current);
+				current = [];
+				continue;
+			}
+			current.push(row);
+		}
+		if (current.length) hunks.push(current);
+		return hunks;
+	}
+
+	function findAnchorElement(container, hunk) {
+		const pick = (row) => String(row?.text ?? "").trim();
+		const ctx = hunk.find((r) => r.type === "ctx" && pick(r).length >= 6);
+		const add = hunk.find((r) => r.type === "add" && pick(r).length >= 6);
+		const del = hunk.find((r) => r.type === "del" && pick(r).length >= 6);
+		const anchorText = pick(ctx || add || del);
+		if (!anchorText) return null;
+
+		const needle = anchorText.slice(0, 48);
+		const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+
+		/** @type {Text | null} */
+		let node;
+		while ((node = walker.nextNode())) {
+			const content = node.textContent || "";
+			if (!content.includes(needle)) continue;
+			const parent = node.parentElement;
+			if (!parent) return null;
+			const block = parent.closest("p, li, blockquote, pre, h1, h2, h3, h4, h5, h6");
+			return block || parent;
+		}
+
+		return null;
+	}
+
+	function normalizeLineText(text) {
+		return String(text ?? "")
+			.replace(/\r\n/g, "\n")
+			.replace(/\r/g, "\n")
+			.replace(/\u00A0/g, " ")
+			.replace(/[ \t]+$/g, "")
+			.trim();
+	}
+
+	function lineExistsInArticle(container, lineText) {
+		const t = normalizeLineText(lineText);
+		if (!t) return false;
+		const needle = t.slice(0, 48);
+		return container.textContent?.includes(needle) ?? false;
+	}
+
+	function findBlockByText(container, lineText) {
+		const t = normalizeLineText(lineText);
+		if (!t) return null;
+		const needle = t.slice(0, 48);
+		const blocks = container.querySelectorAll("p, li, blockquote, pre, h1, h2, h3, h4, h5, h6");
+		for (const el of blocks) {
+			if (!(el instanceof HTMLElement)) continue;
+			const content = el.textContent || "";
+			if (!content.includes(needle)) continue;
+			return el;
+		}
+
+		return null;
+	}
+
+	function createDeletionNode(text, includeAnchor, useListItem) {
+		const el = document.createElement(useListItem ? "li" : "p");
+		el.setAttribute("data-post-inline-diff", "1");
+		el.className = "post-inline-diff-del-line";
+
+		if (includeAnchor) {
+			const anchor = document.createElement("span");
+			anchor.id = "post-diff";
+			anchor.setAttribute("data-post-inline-diff", "1");
+			el.appendChild(anchor);
+		}
+
+		const prefix = document.createElement("span");
+		prefix.className = "post-inline-diff-prefix";
+		prefix.textContent = "-";
+
+		const del = document.createElement("del");
+		del.textContent = ` ${normalizeLineText(text)}`;
+
+		el.appendChild(prefix);
+		el.appendChild(del);
+		return el;
+	}
+
+	function insertAfter(node, ref) {
+		const parent = ref?.parentNode;
+		if (!parent) return false;
+		parent.insertBefore(node, ref.nextSibling);
+		return true;
+	}
+
+	function applyInlineDiff(container, diffParts) {
+		clearInlineDiff(container);
+		const rows = buildRows(diffParts);
+		const focused = sliceWithContext(rows);
+		const hunks = toHunks(focused);
+
+		let insertedAnchor = false;
+		for (const hunk of hunks) {
+			const insertionPoint = findAnchorElement(container, hunk);
+			for (const row of hunk) {
+				if (row.type !== "add") continue;
+				const target = findBlockByText(container, row.text);
+				if (!(target instanceof HTMLElement)) continue;
+				target.classList.add("post-inline-diff-add-target");
+				target.setAttribute("data-post-inline-diff-add-target", "1");
+			}
+
+			for (const row of hunk) {
+				if (row.type !== "del") continue;
+				const t = normalizeLineText(row.text);
+				if (!t) continue;
+				if (lineExistsInArticle(container, t)) continue;
+
+				let inserted = false;
+
+				for (let i = hunk.indexOf(row) - 1; i >= 0; i -= 1) {
+					const prev = hunk[i];
+					if (prev?.type !== "ctx") continue;
+					const ctxEl = findBlockByText(container, prev.text);
+					if (!(ctxEl instanceof HTMLElement)) continue;
+					const useListItem = ctxEl.tagName === "LI";
+					const node = createDeletionNode(t, !insertedAnchor, useListItem);
+					if (!insertedAnchor) insertedAnchor = true;
+					inserted = insertAfter(node, ctxEl);
+					break;
+				}
+
+				if (!inserted) {
+					for (let i = hunk.indexOf(row) + 1; i < hunk.length; i += 1) {
+						const next = hunk[i];
+						if (next?.type !== "ctx") continue;
+						const ctxEl = findBlockByText(container, next.text);
+						if (!(ctxEl instanceof HTMLElement)) continue;
+						const useListItem = ctxEl.tagName === "LI";
+						const node = createDeletionNode(t, !insertedAnchor, useListItem);
+						if (!insertedAnchor) insertedAnchor = true;
+						ctxEl.parentNode?.insertBefore(node, ctxEl);
+						inserted = true;
+						break;
+					}
+				}
+
+				if (!inserted) {
+					const useListItem = insertionPoint?.tagName === "LI";
+					const node = createDeletionNode(t, !insertedAnchor, useListItem);
+					if (!insertedAnchor) insertedAnchor = true;
+					if (insertionPoint?.parentNode) insertionPoint.parentNode.insertBefore(node, insertionPoint);
+					else container.prepend(node);
+				}
+			}
+		}
+	}
+
+	function initPostInlineDiff() {
+		const container = document.querySelector(".markdown-content");
+		if (!(container instanceof HTMLElement)) return;
+
+		const stateStr = localStorage.getItem(NOTIFICATION_STATE_KEY);
+		if (!stateStr) {
+			clearInlineDiff(container);
+			return;
+		}
+
+		let state;
+		try {
+			state = JSON.parse(stateStr);
+		} catch {
+			clearInlineDiff(container);
+			return;
+		}
+
+		const items = Array.isArray(state?.items) ? state.items : [];
+		const currentPath = normalizePathname(window.location.pathname);
+
+		const matched = items.find((post) => {
+			if (!post?.isUpdated || !post?.diff) return false;
+			const guidPath = normalizePathname(normalizeGuid(post.guid, post.link));
+			const linkPath = normalizePathname(getRelativePath(post.link));
+			return guidPath === currentPath || linkPath === currentPath;
+		});
+
+		const shouldApply = (() => {
+			const sp = new URLSearchParams(window.location.search);
+			if (sp.get("diff") === "1") return true;
+			if (window.location.hash === "#post-diff") return true;
+			return false;
+		})();
+
+		if (!shouldApply || !matched?.diff) {
+			clearInlineDiff(container);
+			return;
+		}
+
+		applyInlineDiff(container, matched.diff);
+		const anchor = document.getElementById("post-diff");
+		if (anchor instanceof HTMLElement) anchor.scrollIntoView({ behavior: "smooth", block: "start" });
+	}
+
+	document.addEventListener("DOMContentLoaded", initPostInlineDiff);
+	document.addEventListener("swup:contentReplaced", initPostInlineDiff);
+</script>
+
+<style is:global>
+	.post-inline-diff-prefix {
+		display: inline-block;
+		width: 1.25rem;
+		opacity: 0.6;
+	}
+
+	.post-inline-diff-add-target {
+		text-decoration-line: underline;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.18em;
+		text-decoration-color: rgb(22 163 74 / 1);
+	}
+
+	:global(.dark) .post-inline-diff-add-target {
+		text-decoration-color: rgb(134 239 172 / 1);
+	}
+
+	.post-inline-diff-del-line {
+		margin: 0.5rem 0;
+		color: rgb(220 38 38 / 1);
+	}
+
+	:global(.dark) .post-inline-diff-del-line {
+		color: rgb(252 165 165 / 1);
+	}
+
+	.post-inline-diff-del-line del {
+		text-decoration-thickness: 2px;
+	}
+
+	.post-inline-diff-del-line.post-inline-diff-del-line {
+		list-style: none;
+	}
+</style>
