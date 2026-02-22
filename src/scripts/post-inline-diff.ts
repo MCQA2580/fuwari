@@ -15,8 +15,7 @@ function isLogEnabled() {
 		const sp = new URLSearchParams(window.location.search);
 		if (sp.get("__diff_log") === "1") return true;
 		if (sp.get("__diff_debug") === "1") return true;
-	} catch {
-	}
+	} catch {}
 	return (window as any).__fuwariDiffLog === true;
 }
 
@@ -73,7 +72,9 @@ function clearInlineDiff(container: HTMLElement) {
 		el.replaceWith(text);
 	});
 
-	container.querySelectorAll("[data-post-inline-diff]").forEach((el) => el.remove());
+	container
+		.querySelectorAll("[data-post-inline-diff]")
+		.forEach((el) => el.remove());
 	container
 		.querySelectorAll("[data-post-inline-diff-add-target]")
 		.forEach((el) => el.removeAttribute("data-post-inline-diff-add-target"));
@@ -82,7 +83,9 @@ function clearInlineDiff(container: HTMLElement) {
 		.forEach((el) => el.classList.remove("post-inline-diff-add-target"));
 	container
 		.querySelectorAll("[data-post-inline-diff-add-target-img]")
-		.forEach((el) => el.removeAttribute("data-post-inline-diff-add-target-img"));
+		.forEach((el) =>
+			el.removeAttribute("data-post-inline-diff-add-target-img"),
+		);
 	container
 		.querySelectorAll(".post-inline-diff-add-target-img")
 		.forEach((el) => el.classList.remove("post-inline-diff-add-target-img"));
@@ -94,7 +97,9 @@ function clearInlineDiff(container: HTMLElement) {
 		.forEach((el) => el.classList.remove("post-inline-diff-del-target"));
 	container
 		.querySelectorAll("[data-post-inline-diff-del-target-img]")
-		.forEach((el) => el.removeAttribute("data-post-inline-diff-del-target-img"));
+		.forEach((el) =>
+			el.removeAttribute("data-post-inline-diff-del-target-img"),
+		);
 	container
 		.querySelectorAll(".post-inline-diff-del-target-img")
 		.forEach((el) => el.classList.remove("post-inline-diff-del-target-img"));
@@ -147,7 +152,9 @@ function sliceWithContext(rows: DiffRow[]) {
 	return out;
 }
 
-function toHunks(rowsWithGaps: Array<DiffRow | { type: "gap"; text: string }>): DiffHunk[] {
+function toHunks(
+	rowsWithGaps: Array<DiffRow | { type: "gap"; text: string }>,
+): DiffHunk[] {
 	const hunks: DiffHunk[] = [];
 	let current: DiffHunk = [];
 	for (const row of rowsWithGaps) {
@@ -203,7 +210,8 @@ function findImgBySrc(container: HTMLElement, src: string) {
 		if (!(img instanceof HTMLImageElement)) continue;
 		const cand = img.getAttribute("src") || img.getAttribute("data-src") || "";
 		if (cand === norm) return img;
-		if (cand && norm && (cand.includes(norm) || norm.includes(cand))) return img;
+		if (cand && norm && (cand.includes(norm) || norm.includes(cand)))
+			return img;
 	}
 	return null;
 }
@@ -212,7 +220,9 @@ function findBlockByText(container: HTMLElement, line: string) {
 	const key = normalizeForMatch(line);
 	if (key.kind !== "text") return null;
 	const needle = key.value.slice(0, 48);
-	const blocks = container.querySelectorAll("p, li, blockquote, pre, h1, h2, h3, h4, h5, h6");
+	const blocks = container.querySelectorAll(
+		"p, li, blockquote, pre, h1, h2, h3, h4, h5, h6",
+	);
 	for (const el of blocks) {
 		if (!(el instanceof HTMLElement)) continue;
 		if (el.closest(".post-inline-diff-add-line")) continue;
@@ -225,7 +235,11 @@ function findBlockByText(container: HTMLElement, line: string) {
 	return null;
 }
 
-function findContextBefore(container: HTMLElement, hunk: DiffHunk, rowIndex: number) {
+function findContextBefore(
+	container: HTMLElement,
+	hunk: DiffHunk,
+	rowIndex: number,
+) {
 	for (let i = rowIndex - 1; i >= 0; i -= 1) {
 		const row = hunk[i];
 		if (row?.type !== "ctx") continue;
@@ -235,7 +249,11 @@ function findContextBefore(container: HTMLElement, hunk: DiffHunk, rowIndex: num
 	return null;
 }
 
-function findContextAfter(container: HTMLElement, hunk: DiffHunk, rowIndex: number) {
+function findContextAfter(
+	container: HTMLElement,
+	hunk: DiffHunk,
+	rowIndex: number,
+) {
 	for (let i = rowIndex + 1; i < hunk.length; i += 1) {
 		const row = hunk[i];
 		if (row?.type !== "ctx") continue;
@@ -265,11 +283,16 @@ function findAnchorElement(container: HTMLElement, hunk: DiffHunk) {
 
 function sanitizeHtmlFragment(html: string) {
 	const parser = new DOMParser();
-	const doc = parser.parseFromString(`<div>${String(html || "")}</div>`, "text/html");
+	const doc = parser.parseFromString(
+		`<div>${String(html || "")}</div>`,
+		"text/html",
+	);
 	const root = doc.body.firstElementChild;
 	if (!root) return String(html || "");
 
-	root.querySelectorAll("script, iframe, object, embed, style").forEach((el) => el.remove());
+	root
+		.querySelectorAll("script, iframe, object, embed, style")
+		.forEach((el) => el.remove());
 	root.querySelectorAll("*").forEach((el) => {
 		const attrs = Array.from(el.attributes);
 		for (const attr of attrs) {
@@ -285,7 +308,11 @@ function shouldRenderLineAsHtml(line: string) {
 	return /<[a-z][\s\S]*>/i.test(t) || /<\/[a-z][\s\S]*>/i.test(t);
 }
 
-function createDeletionNode(text: string, includeAnchor: boolean, useListItem: boolean) {
+function createDeletionNode(
+	text: string,
+	includeAnchor: boolean,
+	useListItem: boolean,
+) {
 	const el = document.createElement(useListItem ? "li" : "div");
 	el.setAttribute("data-post-inline-diff", "1");
 	el.className = "post-inline-diff-del-line";
@@ -299,14 +326,19 @@ function createDeletionNode(text: string, includeAnchor: boolean, useListItem: b
 
 	const del = document.createElement("del");
 	const raw = normalizeLineText(text);
-	if (shouldRenderLineAsHtml(raw)) del.innerHTML = " " + sanitizeHtmlFragment(raw);
+	if (shouldRenderLineAsHtml(raw))
+		del.innerHTML = " " + sanitizeHtmlFragment(raw);
 	else del.textContent = ` ${raw}`;
 
 	el.appendChild(del);
 	return el;
 }
 
-function createAdditionNode(text: string, includeAnchor: boolean, useListItem: boolean) {
+function createAdditionNode(
+	text: string,
+	includeAnchor: boolean,
+	useListItem: boolean,
+) {
 	const el = document.createElement(useListItem ? "li" : "div");
 	el.setAttribute("data-post-inline-diff", "1");
 	el.className = "post-inline-diff-add-line";
@@ -322,7 +354,8 @@ function createAdditionNode(text: string, includeAnchor: boolean, useListItem: b
 	content.className = "post-inline-diff-add-content";
 
 	const raw = String(text ?? "").trim();
-	if (shouldRenderLineAsHtml(raw)) content.innerHTML = sanitizeHtmlFragment(raw);
+	if (shouldRenderLineAsHtml(raw))
+		content.innerHTML = sanitizeHtmlFragment(raw);
 	else content.textContent = raw;
 
 	el.appendChild(content);
@@ -338,145 +371,29 @@ function insertAfter(node: Node, ref: Node | null) {
 
 function parseHtmlSingleElement(html: string) {
 	const parser = new DOMParser();
-	const doc = parser.parseFromString(`<div>${String(html || "")}</div>`, "text/html");
+	const doc = parser.parseFromString(
+		`<div>${String(html || "")}</div>`,
+		"text/html",
+	);
 	return doc.body.firstElementChild?.firstElementChild;
 }
 
-function applyInlineTextDiff(targetTextNodes: Text | Text[], oldText: string, newText: string, anchorState: { inserted: boolean }) {
-	const nodes = Array.isArray(targetTextNodes) ? targetTextNodes : [targetTextNodes];
-	const head = nodes[0];
-	if (!(head instanceof Text)) return false;
-	for (let i = 1; i < nodes.length; i += 1) {
-		const n = nodes[i];
-		n.parentNode?.removeChild(n);
-	}
-
-	const parts = Diff.diffChars(String(oldText || ""), String(newText || ""));
-	const frag = document.createDocumentFragment();
-	for (const part of parts) {
-		if (part.added || part.removed) {
-			if (!anchorState.inserted) {
-				const anchor = document.createElement("span");
-				anchor.id = "post-diff";
-				anchor.setAttribute("data-post-inline-diff-inline", "anchor");
-				frag.appendChild(anchor);
-				anchorState.inserted = true;
-			}
-			const span = document.createElement("span");
-			span.className = part.added ? "post-inline-diff-add-target" : "post-inline-diff-del-target";
-			span.setAttribute("data-post-inline-diff-inline", part.added ? "add" : "del");
-			span.textContent = String(part.value ?? "");
-			frag.appendChild(span);
-			continue;
-		}
-		frag.appendChild(document.createTextNode(String(part.value ?? "")));
-	}
-	head.parentNode?.replaceChild(frag, head);
-	return parts.some((p) => p.added || p.removed);
+function applyInlineTextDiff(
+	targetTextNodes: Text | Text[],
+	oldText: string,
+	newText: string,
+	anchorState: { inserted: boolean },
+) {
+	return false;
 }
 
-function tryApplyInlineReplace(targetEl: HTMLElement, oldHtml: string, newHtml: string, anchorState: { inserted: boolean }) {
-	const log = isLogEnabled();
-	const oldEl = parseHtmlSingleElement(oldHtml);
-	const newEl = parseHtmlSingleElement(newHtml);
-	if (!(oldEl instanceof HTMLElement) || !(newEl instanceof HTMLElement)) {
-		if (log) console.log("[post-inline-diff] inline-replace: parse failed", { oldHtml, newHtml });
-		return false;
-	}
-	if (oldEl.tagName !== newEl.tagName) {
-		if (log) console.log("[post-inline-diff] inline-replace: tag mismatch", { oldTag: oldEl.tagName, newTag: newEl.tagName, oldHtml, newHtml });
-		return false;
-	}
-	if (targetEl.tagName !== oldEl.tagName) {
-		if (log) console.log("[post-inline-diff] inline-replace: target tag mismatch", { targetTag: targetEl.tagName, oldTag: oldEl.tagName, oldHtml });
-		return false;
-	}
-	const oldTextNorm = normalizeLineText(oldEl.textContent || "");
-	const newTextNorm = normalizeLineText(newEl.textContent || "");
-	const targetTextNorm = normalizeLineText(targetEl.textContent || "");
-	if (oldTextNorm !== targetTextNorm && newTextNorm !== targetTextNorm) {
-		if (log) {
-			console.groupCollapsed("[post-inline-diff] inline-replace: textContent mismatch");
-			console.log({ oldTextNorm, newTextNorm, targetTextNorm });
-			console.log({ oldHtml, newHtml });
-			console.groupEnd();
-		}
-		return false;
-	}
-
-	const tokenize = (el: HTMLElement) => {
-		const out: Array<
-			| { kind: "text"; text: string; nodes: Text[] }
-			| { kind: "el"; node: HTMLElement }
-		> = [];
-		let buf = "";
-		let bufNodes: Text[] = [];
-		for (const n of Array.from(el.childNodes)) {
-			if (n.nodeType === Node.TEXT_NODE) {
-				buf += n.nodeValue || "";
-				bufNodes.push(n as Text);
-				continue;
-			}
-			if (bufNodes.length) {
-				out.push({ kind: "text", text: buf, nodes: bufNodes });
-				buf = "";
-				bufNodes = [];
-			}
-			if (n.nodeType === Node.ELEMENT_NODE) out.push({ kind: "el", node: n as HTMLElement });
-			else return null;
-		}
-		if (bufNodes.length) out.push({ kind: "text", text: buf, nodes: bufNodes });
-		return out;
-	};
-
-	const stack: Array<{ a: HTMLElement; b: HTMLElement; t: HTMLElement }> = [{ a: oldEl, b: newEl, t: targetEl }];
-	let changed = false;
-
-	while (stack.length) {
-		const { a, b, t } = stack.pop()!;
-		const aTok = tokenize(a);
-		const bTok = tokenize(b);
-		const tTok = tokenize(t);
-		if (!aTok || !bTok || !tTok) {
-			if (log) console.log("[post-inline-diff] inline-replace: tokenize failed", { oldHtml, newHtml });
-			return false;
-		}
-		if (aTok.length !== bTok.length || aTok.length !== tTok.length) {
-			if (log) {
-				console.groupCollapsed("[post-inline-diff] inline-replace: token length mismatch");
-				console.log({ aLen: aTok.length, bLen: bTok.length, tLen: tTok.length });
-				console.log({ oldHtml, newHtml });
-				console.groupEnd();
-			}
-			return false;
-		}
-
-		for (let i = aTok.length - 1; i >= 0; i -= 1) {
-			const at = aTok[i];
-			const bt = bTok[i];
-			const tt = tTok[i];
-			if (at.kind !== bt.kind || at.kind !== tt.kind) {
-				if (log) console.log("[post-inline-diff] inline-replace: token kind mismatch", { at: at.kind, bt: bt.kind, tt: tt.kind, oldHtml, newHtml });
-				return false;
-			}
-			if (at.kind === "text") {
-				const did = applyInlineTextDiff(tt.nodes, at.text, bt.text, anchorState);
-				if (did) changed = true;
-				continue;
-			}
-			if (at.kind === "el") {
-				if (at.node.tagName !== bt.node.tagName || at.node.tagName !== tt.node.tagName) {
-					if (log) console.log("[post-inline-diff] inline-replace: element tag mismatch", { a: at.node.tagName, b: bt.node.tagName, t: tt.node.tagName });
-					return false;
-				}
-				stack.push({ a: at.node, b: bt.node, t: tt.node });
-				continue;
-			}
-			return false;
-		}
-	}
-
-	return changed;
+function tryApplyInlineReplace(
+	targetEl: HTMLElement,
+	oldHtml: string,
+	newHtml: string,
+	anchorState: { inserted: boolean },
+) {
+	return false;
 }
 
 function applyInlineDiff(container: HTMLElement, diffParts: DiffPart[]) {
@@ -500,52 +417,60 @@ function applyInlineDiff(container: HTMLElement, diffParts: DiffPart[]) {
 				if (isReplace) {
 					const oldHtml = row.type === "del" ? row.text : next.text;
 					const newHtml = row.type === "add" ? row.text : next.text;
-					const target = findBlockByText(container, oldHtml) || findBlockByText(container, newHtml);
-					if (!(target instanceof HTMLElement)) {
-						if (log) console.log("[post-inline-diff] replace-pair: target not found", { oldHtml });
-					}
+					const target = findBlockByText(container, newHtml);
 					if (target instanceof HTMLElement) {
-						if (log) {
-							console.groupCollapsed("[post-inline-diff] replace-pair attempt");
-							console.log({ oldHtml, newHtml });
-							console.log({ targetTag: target.tagName, targetText: target.textContent });
-							console.groupEnd();
-						}
-						const applied = tryApplyInlineReplace(target, oldHtml, newHtml, anchorState);
-						if (log) console.log("[post-inline-diff] replace-pair result", { applied });
-						if (applied) {
-							idx += 2;
-							continue;
-						}
+						target.classList.add("post-inline-diff-add-target");
+						target.setAttribute("data-post-inline-diff-add-target", "1");
+						const useListItem = target.tagName === "LI";
+						const node = createDeletionNode(
+							oldHtml,
+							!anchorState.inserted,
+							useListItem,
+						);
+						if (!anchorState.inserted) anchorState.inserted = true;
+						target.parentNode?.insertBefore(node, target);
+						idx += 2;
+						continue;
 					}
 				}
 			}
 
 			if (row.type === "add") {
 				let endIdx = idx;
-				let combinedText = row.text;
 				while (endIdx + 1 < hunk.length && hunk[endIdx + 1].type === "add") {
 					endIdx++;
-					combinedText += "\n" + hunk[endIdx].text;
 				}
-				const ctxBefore = findContextBefore(container, hunk, idx);
-				const ctxAfter = findContextAfter(container, hunk, endIdx);
-
-				const useListItem = (ctxBefore?.tagName === "LI") || (ctxAfter?.tagName === "LI");
-				const node = createAdditionNode(combinedText, !anchorState.inserted, useListItem);
-				if (!anchorState.inserted) anchorState.inserted = true;
-
-				let inserted = false;
-				if (ctxBefore?.parentNode) inserted = insertAfter(node, ctxBefore);
-				if (!inserted && ctxAfter?.parentNode) {
-					ctxAfter.parentNode.insertBefore(node, ctxAfter);
-					inserted = true;
+				for (let i = idx; i <= endIdx; i++) {
+					const addRow = hunk[i];
+					const key = normalizeForMatch(addRow.text);
+					if (key.kind === "img") {
+						const img = findImgBySrc(container, key.value);
+						if (img instanceof HTMLElement) {
+							img.classList.add("post-inline-diff-add-target-img");
+							img.setAttribute("data-post-inline-diff-add-target-img", "1");
+							if (!anchorState.inserted) {
+								const anchor = document.createElement("span");
+								anchor.id = "post-diff";
+								anchor.setAttribute("data-post-inline-diff", "1");
+								img.parentNode?.insertBefore(anchor, img);
+								anchorState.inserted = true;
+							}
+						}
+					} else {
+						const target = findBlockByText(container, addRow.text);
+						if (target instanceof HTMLElement) {
+							target.classList.add("post-inline-diff-add-target");
+							target.setAttribute("data-post-inline-diff-add-target", "1");
+							if (!anchorState.inserted) {
+								const anchor = document.createElement("span");
+								anchor.id = "post-diff";
+								anchor.setAttribute("data-post-inline-diff", "1");
+								target.parentNode?.insertBefore(anchor, target);
+								anchorState.inserted = true;
+							}
+						}
+					}
 				}
-				if (!inserted) {
-					if (insertionPoint?.parentNode) insertionPoint.parentNode.insertBefore(node, insertionPoint);
-					else container.prepend(node);
-				}
-
 				idx = endIdx + 1;
 				continue;
 			}
@@ -602,7 +527,11 @@ function applyInlineDiff(container: HTMLElement, diffParts: DiffPart[]) {
 					const ctxEl = findBlockByText(container, next.text);
 					if (!(ctxEl instanceof HTMLElement)) continue;
 					const useListItem = ctxEl.tagName === "LI";
-					const node = createDeletionNode(t, !anchorState.inserted, useListItem);
+					const node = createDeletionNode(
+						t,
+						!anchorState.inserted,
+						useListItem,
+					);
 					if (!anchorState.inserted) anchorState.inserted = true;
 					ctxEl.parentNode?.insertBefore(node, ctxEl);
 					inserted = true;
@@ -614,7 +543,8 @@ function applyInlineDiff(container: HTMLElement, diffParts: DiffPart[]) {
 				const useListItem = insertionPoint?.tagName === "LI";
 				const node = createDeletionNode(t, !anchorState.inserted, useListItem);
 				if (!anchorState.inserted) anchorState.inserted = true;
-				if (insertionPoint?.parentNode) insertionPoint.parentNode.insertBefore(node, insertionPoint);
+				if (insertionPoint?.parentNode)
+					insertionPoint.parentNode.insertBefore(node, insertionPoint);
 				else container.prepend(node);
 			}
 
@@ -679,11 +609,17 @@ export function initPostInlineDiff() {
 		if (!post?.isUpdated || !post?.diff) return false;
 		const guidPath = normalizePathname(normalizeGuid(post.guid, post.link));
 		const linkPath = normalizePathname(getRelativePath(post.link));
-		const postCandidates = [guidPath, linkPath, stripBasePath(guidPath), stripBasePath(linkPath)];
+		const postCandidates = [
+			guidPath,
+			linkPath,
+			stripBasePath(guidPath),
+			stripBasePath(linkPath),
+		];
 		return postCandidates.some((p) => currentCandidates.has(p));
 	});
 
-	const shouldApply = isDebug || sp.get("diff") === "1" || window.location.hash === "#post-diff";
+	const shouldApply =
+		isDebug || sp.get("diff") === "1" || window.location.hash === "#post-diff";
 	if (log) {
 		console.groupCollapsed("[post-inline-diff] init");
 		console.log({
@@ -692,7 +628,9 @@ export function initPostInlineDiff() {
 			currentPath,
 			currentStripped,
 			hasMatched: !!matched,
-			source: isDebug ? "sessionStorage:fuwari-diff-debug-state" : "localStorage:fuwari-notification-state",
+			source: isDebug
+				? "sessionStorage:fuwari-diff-debug-state"
+				: "localStorage:fuwari-notification-state",
 		});
 		if (matched) {
 			console.log({
@@ -702,9 +640,12 @@ export function initPostInlineDiff() {
 				diffType: matched.diffType,
 				diffKeys: matched.diff ? Object.keys(matched.diff) : [],
 			});
-			if (matched?.diff?.content) console.log({ contentDiffParts: matched.diff.content });
-			if (matched?.diff?.title) console.log({ titleDiffParts: matched.diff.title });
-			if (matched?.diff?.description) console.log({ descDiffParts: matched.diff.description });
+			if (matched?.diff?.content)
+				console.log({ contentDiffParts: matched.diff.content });
+			if (matched?.diff?.title)
+				console.log({ titleDiffParts: matched.diff.title });
+			if (matched?.diff?.description)
+				console.log({ descDiffParts: matched.diff.description });
 		}
 		console.groupEnd();
 	}
@@ -722,7 +663,10 @@ export function initPostInlineDiff() {
 		if (diffType === "title") diffData = { title: diffData };
 		else if (diffType === "description") diffData = { description: diffData };
 		else diffData = { content: diffData };
-	} else if (diffData.diff && (diffData.diffType === "composite" || diffData.diffType === undefined)) {
+	} else if (
+		diffData.diff &&
+		(diffData.diffType === "composite" || diffData.diffType === undefined)
+	) {
 		diffData = diffData.diff;
 	}
 
@@ -738,11 +682,13 @@ export function initPostInlineDiff() {
 
 	if (diffData.content) {
 		const container = document.querySelector(".markdown-content");
-		if (container instanceof HTMLElement) applyInlineDiff(container, diffData.content);
+		if (container instanceof HTMLElement)
+			applyInlineDiff(container, diffData.content);
 	}
 
 	const anchor = document.getElementById("post-diff");
-	if (anchor instanceof HTMLElement) anchor.scrollIntoView({ behavior: "smooth", block: "start" });
+	if (anchor instanceof HTMLElement)
+		anchor.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 export function bindPostInlineDiff() {

@@ -361,42 +361,56 @@
 					if (isReplace) {
 						const oldHtml = row.type === "del" ? row.text : next.text;
 						const newHtml = row.type === "add" ? row.text : next.text;
-						const target = findBlockByText(container, oldHtml);
+						const target = findBlockByText(container, newHtml);
 						if (target instanceof HTMLElement) {
-							const applied = tryApplyInlineReplace(target, oldHtml, newHtml, anchorState);
-							if (applied) {
-								idx += 2;
-								continue;
-							}
+							target.classList.add("post-inline-diff-add-target");
+							target.setAttribute("data-post-inline-diff-add-target", "1");
+							const useListItem = target.tagName === "LI";
+							const node = createDeletionNode(oldHtml, !anchorState.inserted, useListItem);
+							if (!anchorState.inserted) anchorState.inserted = true;
+							target.parentNode?.insertBefore(node, target);
+							idx += 2;
+							continue;
 						}
 					}
 				}
 
 				if (row.type === "add") {
 					let endIdx = idx;
-					let combinedText = row.text;
 					while (endIdx + 1 < hunk.length && hunk[endIdx + 1].type === "add") {
 						endIdx++;
-						combinedText += "\n" + hunk[endIdx].text;
 					}
-					const ctxBefore = findContextBefore(container, hunk, idx);
-					const ctxAfter = findContextAfter(container, hunk, endIdx);
-
-					const useListItem = (ctxBefore?.tagName === "LI") || (ctxAfter?.tagName === "LI");
-					const node = createAdditionNode(combinedText, !anchorState.inserted, useListItem);
-					if (!anchorState.inserted) anchorState.inserted = true;
-
-					let inserted = false;
-					if (ctxBefore?.parentNode) inserted = insertAfter(node, ctxBefore);
-					if (!inserted && ctxAfter?.parentNode) {
-						ctxAfter.parentNode.insertBefore(node, ctxAfter);
-						inserted = true;
+					for (let i = idx; i <= endIdx; i++) {
+						const addRow = hunk[i];
+						const key = normalizeForMatch(addRow.text);
+						if (key.kind === "img") {
+							const img = findImgBySrc(container, key.value);
+							if (img instanceof HTMLElement) {
+								img.classList.add("post-inline-diff-add-target-img");
+								img.setAttribute("data-post-inline-diff-add-target-img", "1");
+								if (!anchorState.inserted) {
+									const anchor = document.createElement("span");
+									anchor.id = "post-diff";
+									anchor.setAttribute("data-post-inline-diff", "1");
+									img.parentNode?.insertBefore(anchor, img);
+									anchorState.inserted = true;
+								}
+							}
+						} else {
+							const target = findBlockByText(container, addRow.text);
+							if (target instanceof HTMLElement) {
+								target.classList.add("post-inline-diff-add-target");
+								target.setAttribute("data-post-inline-diff-add-target", "1");
+								if (!anchorState.inserted) {
+									const anchor = document.createElement("span");
+									anchor.id = "post-diff";
+									anchor.setAttribute("data-post-inline-diff", "1");
+									target.parentNode?.insertBefore(anchor, target);
+									anchorState.inserted = true;
+								}
+							}
+						}
 					}
-					if (!inserted) {
-						if (insertionPoint?.parentNode) insertionPoint.parentNode.insertBefore(node, insertionPoint);
-						else container.prepend(node);
-					}
-
 					idx = endIdx + 1;
 					continue;
 				}
@@ -663,13 +677,35 @@
 	}
 
 	.post-inline-diff-del-target {
-		color: rgb(220 38 38 / 1);
+		color: rgb(220 38 38 / 1) !important;
 		text-decoration-line: line-through;
 		text-decoration-thickness: 2px;
+		text-decoration-color: rgb(220 38 38 / 1);
 	}
 
 	:global(.dark) .post-inline-diff-del-target {
-		color: rgb(252 165 165 / 1);
+		color: rgb(252 165 165 / 1) !important;
+		text-decoration-color: rgb(252 165 165 / 1);
+	}
+
+	h1.post-inline-diff-del-target,
+	h2.post-inline-diff-del-target,
+	h3.post-inline-diff-del-target,
+	h4.post-inline-diff-del-target,
+	h5.post-inline-diff-del-target,
+	h6.post-inline-diff-del-target {
+		color: rgb(220 38 38 / 1) !important;
+		text-decoration-color: rgb(220 38 38 / 1);
+	}
+
+	:global(.dark) h1.post-inline-diff-del-target,
+	:global(.dark) h2.post-inline-diff-del-target,
+	:global(.dark) h3.post-inline-diff-del-target,
+	:global(.dark) h4.post-inline-diff-del-target,
+	:global(.dark) h5.post-inline-diff-del-target,
+	:global(.dark) h6.post-inline-diff-del-target {
+		color: rgb(252 165 165 / 1) !important;
+		text-decoration-color: rgb(252 165 165 / 1);
 	}
 
 	.post-inline-diff-del-target-img {
