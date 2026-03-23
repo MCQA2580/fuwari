@@ -5,8 +5,7 @@ description: 多的不说，仅做记录
 tags: [Codex, AI, 工具]
 category: 技术
 draft: false
-image: ""
-lang: ""
+image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=AI%20code%20generation%20interface%20with%20Codex%20generating%20Python%20code&image_size=landscape_16_9"
 ---
 
 ## Codex 是什么？

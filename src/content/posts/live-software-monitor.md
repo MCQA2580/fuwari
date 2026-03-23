@@ -5,8 +5,7 @@ description: 通过持续监测当前前台进程和指定程序的窗口标题�
 tags: [直播, OBS, 教程]
 category: 教程
 draft: false
-image: ""
-lang: ""
+image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=OBS%20Studio%20interface%20showing%20live%20stream%20with%20software%20monitoring%20text%20overlay&image_size=landscape_16_9"
 ---
 
 ## 为什么需要监测软件使用情况？

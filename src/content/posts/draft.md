@@ -5,8 +5,7 @@ description: 这是一篇草稿文章示例，用于测试草稿功能。
 tags: [Markdown, 博客, 演示]
 category: 示例
 draft: true
-image: ""
-lang: ""
+image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Draft%20article%20workflow%20with%20edit%20mode%20interface&image_size=landscape_16_9"
 ---
 
 # 这是一篇草稿

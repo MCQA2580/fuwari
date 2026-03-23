@@ -5,8 +5,7 @@ description: 你知道吗？其实Windows一直都在让NVMe硬盘以兼容模�
 tags: [Windows, 硬盘, 性能]
 category: 技术
 draft: false
-image: ""
-lang: ""
+image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Windows%2011%20disk%20performance%20monitor%20showing%20NVMe%20SSD%20speeds&image_size=landscape_16_9"
 ---
 
 ## 问题背景

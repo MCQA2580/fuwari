@@ -5,8 +5,7 @@ description: 从实战角度对比 AI IDE 与 AI Agent，并演示如何用 ZCF 
 tags: [AI, Agent, 工具]
 category: 技术
 draft: false
-image: ""
-lang: ""
+image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=AI%20Agent%20system%20architecture%20with%20multiple%20tools%20and%20decision%20making%20process&image_size=landscape_16_9"
 ---
 
 ## AI IDE 与 AI Agent 的区别

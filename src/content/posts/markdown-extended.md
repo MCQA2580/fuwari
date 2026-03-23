@@ -3,7 +3,7 @@ title: Markdown 扩展功能
 published: 2024-05-01
 updated: 2024-11-29
 description: '了解 Fuwari 中的 Markdown 扩展功能'
-image: ''
+image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Markdown%20extended%20features%20with%20advanced%20formatting%20options&image_size=landscape_16_9"
 tags: [演示, 示例, Markdown, Fuwari]
 category: '示例'
 draft: false 
