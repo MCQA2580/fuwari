@@ -16,8 +16,8 @@ export const siteConfig: SiteConfig = {
 		fixed: false, // 对访问者隐藏主题颜色选择器
 	},
 	banner: {
-		enable: false,
-		src: "assets/images/demo-banner.png", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
+		enable: true,
+		src: "https://raw.githubusercontent.com/MCQA2580/1/main/images" + (Math.floor(Math.random() * 1499) + 1 <= 750 ? "1" : "2") + "/" + (Math.floor(Math.random() * 1499) + 1) + ".jpg", // 从GitHub仓库随机加载图片
 		position: "center", // 相当于 object-position，仅支持 'top', 'center', 'bottom'。默认为 'center'
 		credit: {
 			enable: false, // 显示横幅图片的 credits 文本
@@ -46,7 +46,7 @@ export const navBarConfig: NavBarConfig = {
 		LinkPreset.About,
 		{
 			name: "GitHub",
-			url: "https://github.com/saicaca/fuwari", // 内部链接不应包含基础路径，因为它会自动添加
+			url: "https://github.com/MCQA2580/fuwari", // 内部链接不应包含基础路径，因为它会自动添加
 			external: true, // 显示外部链接图标并在新标签页中打开
 		},
 	],
@@ -58,13 +58,6 @@ export const profileConfig: ProfileConfig = {
 		bio: "这是一个使用 Fuwari 主题的演示博客。",
 		links: [
 		{
-			name: "Twitter",
-			icon: "fa6-brands:twitter", // 访问 https://icones.js.org/ 获取图标代码
-			// 如果尚未包含相应的图标集，您需要安装它
-			// `pnpm add @iconify-json/<icon-set-name>`
-			url: "https://twitter.com",
-		},
-		{
 			name: "Steam",
 			icon: "fa6-brands:steam",
 			url: "https://store.steampowered.com",
@@ -72,7 +65,7 @@ export const profileConfig: ProfileConfig = {
 		{
 			name: "GitHub",
 			icon: "fa6-brands:github",
-			url: "https://github.com/saicaca/fuwari",
+			url: "https://github.com/MCQA2580/fuwari",
 		},
 	],
 };
