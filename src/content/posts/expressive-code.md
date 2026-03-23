@@ -5,6 +5,7 @@ description: 使用 Expressive Code 在 Markdown 中代码块的显示效果。
 tags: [Markdown, 博客, 演示]
 category: 示例
 draft: false
+image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Expressive%20Code%20formatted%20code%20block%20with%20syntax%20highlighting%20and%20themes&image_size=landscape_16_9"
 ---
 
 在这里，我们将探索使用 [Expressive Code](https://expressive-code.com/) 的代码块看起来如何。提供的示例基于官方文档，您可以参考官方文档获取更多详细信息。

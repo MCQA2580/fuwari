@@ -5,6 +5,7 @@ description: 详细介绍如何在Cloudflare上原生托管视频，使用FFmpeg
 tags: [Cloudflare, 视频托管, 流媒体]
 category: 教程
 draft: false
+image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Cloudflare%20video%20hosting%20dashboard%20with%20video%20files%20and%20streaming%20settings&image_size=landscape_16_9"
 ---
 
 ## 引言

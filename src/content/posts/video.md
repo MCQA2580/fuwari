@@ -5,6 +5,7 @@ description: 这篇文章演示如何在博客文章中嵌入视频。
 tags: [示例, 视频]
 category: 示例
 draft: false
+image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Video%20player%20embedded%20in%20blog%20post%20with%20play%20controls&image_size=landscape_16_9"
 ---
 
 只需从 YouTube 或其他平台复制嵌入代码，然后将其粘贴到 Markdown 文件中。

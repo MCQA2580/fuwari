@@ -5,8 +5,7 @@ description: Markdown语法使用示例，展示各种格式化选项。
 tags: [Markdown, 博客, 示例]
 category: 示例
 draft: false
-image: ""
-lang: ""
+image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Markdown%20editor%20showing%20formatted%20text%20with%20headings%20and%20lists&image_size=landscape_16_9"
 ---
 
 # An h1 header
