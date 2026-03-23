@@ -1,19 +1,19 @@
 
-# Contributing
+# 贡献指南
 
-Thank you for your interest in contributing!
+感谢您对本项目的贡献兴趣！
 
-## Before You Start
+## 开始之前
 
-If you plan to make major changes (especially new features or design changes), please open an issue or discussion before starting work. This helps ensure your effort aligns with the project's direction.
+如果您计划进行重大更改（特别是新功能或设计更改），请在开始工作前打开一个 issue 或讨论。这有助于确保您的工作与项目方向一致。
 
-## Submitting Code
+## 提交代码
 
-Please keep each pull request focused on a single purpose. Avoid mixing unrelated changes in one PR, as this can make reviewing and merging code more difficult.
+请保持每个拉取请求（PR）专注于单一目的。避免在一个 PR 中混合不相关的更改，因为这会使代码审查和合并变得更加困难。
 
-Please use the [Conventional Commits](https://www.conventionalcommits.org/) format for your commit messages whenever possible. This keeps our history clear and consistent.
+请尽可能使用 [Conventional Commits](https://www.conventionalcommits.org/) 格式来编写提交消息。这可以保持我们的历史记录清晰一致。
 
-Before submitting code, please run the appropriate commands to check for errors and format your code.
+在提交代码之前，请运行适当的命令来检查错误并格式化代码。
 
 ```bash
 pnpm check
