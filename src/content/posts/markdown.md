@@ -1,10 +1,12 @@
 ---
-title: Markdown Example
+title: Markdown示例
 published: 2023-10-01
-description: A simple example of a Markdown blog post.
-tags: [Markdown, Blogging, Demo]
-category: Examples
+description: Markdown语法使用示例，展示各种格式化选项。
+tags: [Markdown, 博客, 示例]
+category: 示例
 draft: false
+image: ""
+lang: ""
 ---
 
 # An h1 header

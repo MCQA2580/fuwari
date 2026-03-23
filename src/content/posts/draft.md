@@ -1,9 +1,12 @@
 ---
 title: 草稿示例
 published: 2022-07-01
+description: 这是一篇草稿文章示例，用于测试草稿功能。
 tags: [Markdown, 博客, 演示]
 category: 示例
 draft: true
+image: ""
+lang: ""
 ---
 
 # 这是一篇草稿
