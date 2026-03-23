@@ -467,8 +467,14 @@ const setup = () => {
 		// hide the temp high element when the transition is done
 		const heightExtend = document.getElementById('page-height-extend')
 		if (heightExtend) {
-			heightExtend.classList.remove('hidden')
+			heightExtend.classList.add('hidden')
 		}
+		// Force reflow to ensure content is properly loaded
+		setTimeout(() => {
+			window.scrollTo(0, 0);
+			// Trigger scroll event to update UI
+			scrollFunction();
+		}, 100);
 	});
 	window.swup.hooks.on('visit:end', (_visit: {to: {url: string}}) => {
 		setTimeout(() => {
