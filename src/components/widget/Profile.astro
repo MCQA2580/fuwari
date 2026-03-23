@@ -79,17 +79,23 @@ const config = profileConfig;
                 const response = await fetch('/api/stats');
                 if (response.ok) {
                     const data = await response.json();
-                    document.getElementById('article-count').textContent = data.articleCount;
-                    document.getElementById('word-count').textContent = data.wordCount;
+                    const articleCountElement = document.getElementById('article-count');
+                    const wordCountElement = document.getElementById('word-count');
+                    if (articleCountElement) articleCountElement.textContent = data.articleCount;
+                    if (wordCountElement) wordCountElement.textContent = data.wordCount;
                 } else {
                     // 如果API不可用，使用静态数据
-                    document.getElementById('article-count').textContent = '145';
-                    document.getElementById('word-count').textContent = '11.1w';
+                    const articleCountElement = document.getElementById('article-count');
+                    const wordCountElement = document.getElementById('word-count');
+                    if (articleCountElement) articleCountElement.textContent = '145';
+                    if (wordCountElement) wordCountElement.textContent = '11.1w';
                 }
             } catch (error) {
                 // 如果出错，使用静态数据
-                document.getElementById('article-count').textContent = '145';
-                document.getElementById('word-count').textContent = '11.1w';
+                const articleCountElement = document.getElementById('article-count');
+                const wordCountElement = document.getElementById('word-count');
+                if (articleCountElement) articleCountElement.textContent = '145';
+                if (wordCountElement) wordCountElement.textContent = '11.1w';
             }
             
             // 获取访问量
@@ -97,14 +103,17 @@ const config = profileConfig;
                 const viewsResponse = await fetch('/api/views');
                 if (viewsResponse.ok) {
                     const viewsData = await viewsResponse.json();
-                    document.getElementById('site-views').textContent = viewsData.views;
+                    const siteViewsElement = document.getElementById('site-views');
+                    if (siteViewsElement) siteViewsElement.textContent = viewsData.views;
                 } else {
                     // 如果API不可用，使用静态数据
-                    document.getElementById('site-views').textContent = '548623';
+                    const siteViewsElement = document.getElementById('site-views');
+                    if (siteViewsElement) siteViewsElement.textContent = '548623';
                 }
             } catch (error) {
                 // 如果出错，使用静态数据
-                document.getElementById('site-views').textContent = '548623';
+                const siteViewsElement = document.getElementById('site-views');
+                if (siteViewsElement) siteViewsElement.textContent = '548623';
             }
         }
         

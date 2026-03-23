@@ -61,7 +61,7 @@ let links: NavBarLink[] = navBarConfig.links.map(
     </div>
 </div>
 
-<script>
+<script is:inline>
 function switchTheme() {
     if (localStorage.theme === 'dark') {
         document.documentElement.classList.remove('dark');
@@ -73,13 +73,6 @@ function switchTheme() {
 }
 
 function loadButtonScript() {
-    let switchBtn = document.getElementById("scheme-switch");
-    if (switchBtn) {
-        switchBtn.onclick = function () {
-            switchTheme()
-        };
-    }
-
     let settingBtn = document.getElementById("display-settings-switch");
     if (settingBtn) {
         settingBtn.onclick = function () {
@@ -101,7 +94,11 @@ function loadButtonScript() {
     }
 }
 
-loadButtonScript();
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadButtonScript);
+} else {
+    loadButtonScript();
+}
 </script>
 
 {import.meta.env.PROD && <script is:inline define:vars={{scriptUrl: url('/pagefind/pagefind.js')}}>
