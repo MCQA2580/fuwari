@@ -16,8 +16,8 @@ export const siteConfig: SiteConfig = {
 		fixed: false, // 对访问者隐藏主题颜色选择器
 	},
 	banner: {
-		enable: true,
-		src: "https://raw.githubusercontent.com/MCQA2580/1/main/images" + (Math.floor(Math.random() * 1499) + 1 <= 750 ? "1" : "2") + "/" + (Math.floor(Math.random() * 1499) + 1) + ".jpg", // 从GitHub仓库随机加载图片
+		enable: false,
+		src: "assets/images/demo-banner.png", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
 		position: "center", // 相当于 object-position，仅支持 'top', 'center', 'bottom'。默认为 'center'
 		credit: {
 			enable: false, // 显示横幅图片的 credits 文本
