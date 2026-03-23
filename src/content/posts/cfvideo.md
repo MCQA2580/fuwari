@@ -2,6 +2,7 @@
 title: 教你在Cloudflare上原生托管视频！自建YouTube！
 date: 2026-03-23 10:00:00
 updated: 2026-03-23 10:00:00
+published: true
 categories: [教程]
 tags: [Cloudflare, 视频托管, 流媒体]
 ---
