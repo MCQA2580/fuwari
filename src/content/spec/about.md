@@ -1,5 +1,5 @@
 # 关于
-这是 [Fuwari](https://github.com/saicaca/fuwari) 的演示站点。
+这是 [Fuwari](https://github.com/saicaca/fuwari) 主题的个人博客，由无情创建和维护。
 
 ::github{repo="saicaca/fuwari"}
 

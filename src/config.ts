@@ -55,7 +55,7 @@ export const navBarConfig: NavBarConfig = {
 export const profileConfig: ProfileConfig = {
 		avatar: "assets/images/demo-avatar.png", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
 		name: "无情",
-		bio: "这是一个使用 Fuwari 主题的演示博客。",
+		bio: "这是一个使用 Fuwari 主题的个人博客，分享技术和生活。", 
 		links: [
 		{
 			name: "Steam",
