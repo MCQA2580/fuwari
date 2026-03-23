@@ -45,16 +45,6 @@ export const navBarConfig: NavBarConfig = {
 		LinkPreset.Archive,
 		LinkPreset.About,
 		{
-			name: "加群向导",
-			url: "/posts/guide/",
-			external: false,
-		},
-		{
-			name: "关于如何联系二叉树树",
-			url: "/posts/contact/",
-			external: false,
-		},
-		{
 			name: "GitHub",
 			url: "https://github.com/MCQA2580/fuwari",
 			external: true,

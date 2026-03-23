@@ -172,11 +172,33 @@ body {
 	background-attachment: fixed;
 	background-repeat: no-repeat;
 }
-/* 确保所有div元素都是透明的 */
-div {
-	background-color: transparent !important;
-	backdrop-filter: none !important;
-	border: none !important;
+/* 为内容区域添加半透明背景，确保文字清晰可读 */
+#main-grid {
+	background-color: rgba(255, 255, 255, 0.8) !important;
+	backdrop-filter: blur(8px) !important;
+	border-radius: var(--radius-large) !important;
+	padding: 1.5rem;
+}
+.dark #main-grid {
+	background-color: rgba(0, 0, 0, 0.8) !important;
+	backdrop-filter: blur(8px) !important;
+}
+#top-row {
+	background-color: rgba(255, 255, 255, 0.8) !important;
+	backdrop-filter: blur(8px) !important;
+	border-radius: var(--radius-large) !important;
+}
+.dark #top-row {
+	background-color: rgba(0, 0, 0, 0.8) !important;
+	backdrop-filter: blur(8px) !important;
+}
+.card-base {
+	background-color: rgba(255, 255, 255, 0.8) !important;
+	backdrop-filter: blur(8px) !important;
+}
+.dark .card-base {
+	background-color: rgba(0, 0, 0, 0.8) !important;
+	backdrop-filter: blur(8px) !important;
 }
 #main-grid {
 	padding: 1.5rem;
