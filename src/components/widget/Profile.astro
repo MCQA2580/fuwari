@@ -35,5 +35,41 @@ const config = profileConfig;
             </a>}
         </div>
     </div>
+    <!-- 全站文章与字数统计 -->
+    <div class="grid grid-cols-2 mt-3 pt-3 border-t border-neutral-700">
+        <div class="text-center">
+            <div class="text-xs text-neutral-500 mb-1 flex items-center justify-center gap-1">
+                <svg width="1em" height="1em" class="text-base" data-icon="material-symbols:article-outline">
+                    <symbol id="ai:material-symbols:article-outline" viewBox="0 0 24 24"><path fill="currentColor" d="M7 17h7v-2H7zm0-4h10v-2H7zm0-4h10V7H7zM5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm0-2h14V5H5zM5 5v14z"></path></symbol>
+                    <use href="#ai:material-symbols:article-outline"></use>
+                </svg>
+                <span class="text-xs">文章数</span>
+            </div>
+            <div class="font-bold text-lg text-neutral-300">145</div>
+        </div>
+        <div class="text-center border-l border-neutral-700">
+            <div class="text-xs text-neutral-500 mb-1 flex items-center justify-center gap-1">
+                <svg width="1em" height="1em" class="text-base" data-icon="material-symbols:format-list-numbered">
+                    <symbol id="ai:material-symbols:format-list-numbered" viewBox="0 0 24 24"><path fill="currentColor" d="M3 22v-1.5h2.5v-.75H4v-1.5h1.5v-.75H3V16h3q.425 0 .713.288T7 17v1q0 .425-.288.713T6 19q.425 0 .713.288T7 20v1q0 .425-.288.713T6 22zm0-7v-2.75q0-.425.288-.712T4 11.25h1.5v-.75H3V9h3q.425 0 .713.288T7 10v1.75q0 .425-.288.713T6 12.75H4.5v.75H7V15zm1.5-7V3.5H3V2h3v6zM9 19v-2h12v2zm0-6v-2h12v2zm0-6V5h12v2z"></path></symbol>
+                    <use href="#ai:material-symbols:format-list-numbered"></use>
+                </svg>
+                <span class="text-xs">总字数</span>
+            </div>
+            <div class="font-bold text-lg text-neutral-300">11.1w</div>
+        </div>
+    </div>
+    <!-- 全站访问量统计 -->
+    <div class="grid grid-cols-1 mt-3 pt-3 border-t border-neutral-700">
+        <div class="text-center">
+            <div class="text-xs text-neutral-500 mb-1 flex items-center justify-center gap-1">
+                <svg width="1em" height="1em" class="text-base" data-icon="material-symbols:visibility-outline">
+                    <symbol id="ai:material-symbols:visibility-outline" viewBox="0 0 24 24"><path fill="currentColor" d="M12 16q1.875 0 3.188-1.312T16.5 11.5t-1.312-3.187T12 7T8.813 8.313T7.5 11.5t1.313 3.188T12 16m0-1.8q-1.125 0-1.912-.788T9.3 11.5t.788-1.912T12 8.8t1.913.788t.787 1.912t-.787 1.913T12 14.2m0 4.8q-3.65 0-6.65-2.037T1 11.5q1.35-3.425 4.35-5.462T12 4t6.65 2.038T23 11.5q-1.35 3.425-4.35 5.463T12 19m0-2q2.825 0 5.188-1.487T20.8 11.5q-1.25-2.525-3.613-4.012T12 6T6.813 7.488T3.2 11.5q1.25 2.525 3.613 4.013T12 17"></path></symbol>
+                    <use href="#ai:material-symbols:visibility-outline"></use>
+                </svg>
+                <span class="text-xs">访问量</span>
+            </div>
+            <div id="site-views" class="font-bold text-lg text-neutral-300">548623</div>
+        </div>
+    </div>
 </div>
 
