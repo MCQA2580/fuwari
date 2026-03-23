@@ -45,7 +45,7 @@ const config = profileConfig;
                 </svg>
                 <span class="text-xs">文章数</span>
             </div>
-            <div class="font-bold text-lg text-neutral-300">145</div>
+            <div id="article-count" class="font-bold text-lg text-neutral-300">0</div>
         </div>
         <div class="text-center border-l border-neutral-700">
             <div class="text-xs text-neutral-500 mb-1 flex items-center justify-center gap-1">
@@ -55,7 +55,7 @@ const config = profileConfig;
                 </svg>
                 <span class="text-xs">总字数</span>
             </div>
-            <div class="font-bold text-lg text-neutral-300">11.1w</div>
+            <div id="word-count" class="font-bold text-lg text-neutral-300">0</div>
         </div>
     </div>
     <!-- 全站访问量统计 -->
@@ -68,8 +68,51 @@ const config = profileConfig;
                 </svg>
                 <span class="text-xs">访问量</span>
             </div>
-            <div id="site-views" class="font-bold text-lg text-neutral-300">548623</div>
+            <div id="site-views" class="font-bold text-lg text-neutral-300">0</div>
         </div>
     </div>
+    <script>
+        // 实时统计文章数量和字数
+        async function updateStats() {
+            try {
+                // 获取文章数量
+                const response = await fetch('/api/stats');
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('article-count').textContent = data.articleCount;
+                    document.getElementById('word-count').textContent = data.wordCount;
+                } else {
+                    // 如果API不可用，使用静态数据
+                    document.getElementById('article-count').textContent = '145';
+                    document.getElementById('word-count').textContent = '11.1w';
+                }
+            } catch (error) {
+                // 如果出错，使用静态数据
+                document.getElementById('article-count').textContent = '145';
+                document.getElementById('word-count').textContent = '11.1w';
+            }
+            
+            // 获取访问量
+            try {
+                const viewsResponse = await fetch('/api/views');
+                if (viewsResponse.ok) {
+                    const viewsData = await viewsResponse.json();
+                    document.getElementById('site-views').textContent = viewsData.views;
+                } else {
+                    // 如果API不可用，使用静态数据
+                    document.getElementById('site-views').textContent = '548623';
+                }
+            } catch (error) {
+                // 如果出错，使用静态数据
+                document.getElementById('site-views').textContent = '548623';
+            }
+        }
+        
+        // 初始化时更新统计数据
+        updateStats();
+        
+        // 每5分钟更新一次统计数据
+        setInterval(updateStats, 5 * 60 * 1000);
+    </script>
 </div>
 
