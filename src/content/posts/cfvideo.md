@@ -1,10 +1,10 @@
 ---
 title: 教你在Cloudflare上原生托管视频！自建YouTube！
-date: 2026-03-23 10:00:00
-updated: 2026-03-23 10:00:00
-published: true
-categories: [教程]
+published: 2026-03-23
+description: 详细介绍如何在Cloudflare上原生托管视频，使用FFmpeg进行视频分片，绕过25MB文件大小限制，实现高效的视频分发。
 tags: [Cloudflare, 视频托管, 流媒体]
+category: 教程
+draft: false
 ---
 
 ## 引言
