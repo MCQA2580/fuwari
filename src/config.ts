@@ -8,7 +8,7 @@ import type {
 import { LinkPreset } from "./types/config";
 
 export const siteConfig: SiteConfig = {
-		title: "Fuwari",
+		title: "无情",
 		subtitle: "演示站点",
 		lang: "zh_CN", // 语言代码，例如 'en', 'zh_CN', 'ja' 等
 	themeColor: {
@@ -45,9 +45,19 @@ export const navBarConfig: NavBarConfig = {
 		LinkPreset.Archive,
 		LinkPreset.About,
 		{
+			name: "加群向导",
+			url: "/posts/guide/",
+			external: false,
+		},
+		{
+			name: "关于如何联系二叉树树",
+			url: "/posts/contact/",
+			external: false,
+		},
+		{
 			name: "GitHub",
-			url: "https://github.com/MCQA2580/fuwari", // 内部链接不应包含基础路径，因为它会自动添加
-			external: true, // 显示外部链接图标并在新标签页中打开
+			url: "https://github.com/MCQA2580/fuwari",
+			external: true,
 		},
 	],
 };
