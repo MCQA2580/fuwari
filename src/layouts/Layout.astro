@@ -165,6 +165,12 @@ const bannerOffset =
 	'banner-height': `${BANNER_HEIGHT}vh`,
 }}>
 @tailwind components;
+body {
+	background-image: url('https://www.dmoe.cc/random.php');
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+}
 @layer components {
 	.enable-banner.is-home #banner-wrapper {
 		@apply h-[var(--banner-height-home)] translate-y-[var(--banner-height-extend)]
@@ -191,8 +197,7 @@ const bannerOffset =
 	.navbar-hidden {
 		@apply opacity-0 -translate-y-16
 	}
-}
-</style>
+}</style>
 
 <script>
 import 'overlayscrollbars/overlayscrollbars.css';
