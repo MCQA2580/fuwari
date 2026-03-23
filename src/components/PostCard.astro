@@ -77,7 +77,7 @@ const { remarkPluginFrontmatter } = await entry.render();
 
     </div>
 
-    {hasCover && <a href={url} aria-label={title}
+    {hasCover && <a href={url} aria-label={`${title} - 文章链接`}
                     class:list={["group",
                         "max-h-[20vh] md:max-h-none mx-4 mt-4 -mb-2 md:mb-0 md:mx-0 md:mt-0",
                         "md:w-[var(--coverWidth)] relative md:absolute md:top-3 md:bottom-3 md:right-3 rounded-xl overflow-hidden active:scale-95"
