@@ -3,7 +3,8 @@ dist/
 
 # generated types
 .astro/
-
+demo
+plans
 # dependencies
 node_modules/
 
@@ -17,6 +18,13 @@ pnpm-debug.log*
 .env
 .env.production
 
+# content repository (independent mode)
+/content/
+*.backup
+
+# Large zip files
+*.zip
+
 # macOS-specific files
 .DS_Store
 
@@ -29,9 +37,18 @@ yarn.lock
 # ide
 .idea
 *.iml
+.claude
 
-# wrangler files
-.wrangler
-.dev.vars*
-!.dev.vars.example
-!.env.example
+cache/
+fuwari/
+src/data/myself.ts
+src/pages/myself.astro
+
+# Bangumi generated data
+src/data/bangumi-data.json
+
+# Bilibili generated data
+src/data/bilibili-data.json
+
+# Lighthouse CI
+.lighthouseci/
