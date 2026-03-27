@@ -1,24 +1,22 @@
 ---
-title: 草稿示例
+title: Draft Example
 published: 2022-07-01
-description: 这是一篇草稿文章示例，用于测试草稿功能。
-tags: [Markdown, 博客, 演示]
-category: 示例
+tags: [Markdown, Blogging, Demo]
+category: Examples
 draft: true
-image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Draft%20article%20workflow%20with%20edit%20mode%20interface&image_size=landscape_16_9"
 ---
 
-# 这是一篇草稿
+# This Article is a Draft
 
-这篇文章目前处于草稿状态，尚未发布。因此，它不会对普通读者可见。内容仍在进行中，可能需要进一步编辑和审查。
+This article is currently in a draft state and is not published. Therefore, it will not be visible to the general audience. The content is still a work in progress and may require further editing and review.
 
-当文章准备好发布时，您可以在 Frontmatter 中将 "draft" 字段更新为 "false"：
+When the article is ready for publication, you can update the "draft" field to "false" in the Frontmatter:
 
 ```markdown
 ---
-title: 草稿示例
+title: Draft Example
 published: 2024-01-11T04:40:26.381Z
-tags: [Markdown, 博客, 演示]
-category: 示例
+tags: [Markdown, Blogging, Demo]
+category: Examples
 draft: false
 ---
