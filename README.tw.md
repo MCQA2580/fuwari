@@ -1,4 +1,4 @@
-# 🌸 Mizuki
+# 🌸 Mizuki 
 <img align='right' src='logo.png' width='200px' alt="Mizuki logo">
 
 一個現代化、功能豐富的靜態部落格模板，基於 [Astro](https://astro.build) 構建，具有先進的功能和精美的設計。
@@ -42,8 +42,6 @@
 [**中文**](./README.zh.md) /
 [**日本語**](./README.ja.md) /
 [**中文繁体**](./README.tw.md) /
-
-
 
 
 ### 🔧 元件配置系統重構
@@ -127,7 +125,7 @@
 3. **配置部落格：**
    - 編輯 `src/config.ts` 自定義部落格設置
    - 更新網站資訊、主題色彩、橫幅圖片和社交連結
-   - 配置翻譯設置和特色頁面功能
+   - 配置特色頁面功能
 
 4. **啟動開發伺服器：**
    ```bash
@@ -151,9 +149,9 @@
 - **GitHub Pages：** 使用包含的 GitHub Actions 工作流
 - **Cloudflare Pages：** 連接您的儲存庫
 
-部署前，請在 `src/config.ts` 中更新 `siteURL`。
-
 - **環境變數配置（可選）：** 可參照 `.env.example` 來配置
+
+部署前，請在 `src/config.ts` 中更新 `siteURL`。
 **不建議**將 `.env` 檔案提交到 Git，`.env` 應該僅在本地調試或構建使用。若要將項目在雲平台部署，建議通過平台上的 `環境變數` 配置傳入。
 
 ## 📝 文章前言格式
@@ -366,5 +364,6 @@ pnpm run sync-content
 ## ⭐ Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=matsuzaka-yuki/Mizuki&type=Date)](https://star-history.com/#matsuzaka-yuki/Mizuki&Date)
+---
 
 ⭐ 如果您覺得這個專案有幫助，請考慮給它一個星標！
