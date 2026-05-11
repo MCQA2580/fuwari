@@ -73,6 +73,8 @@
 		"satori": "^0.19.2",
 		"sharp": "^0.34.5",
 		"stylus": "^0.64.0",
+		"svelte": "^5.55.1",
+		"tailwindcss": "^4.0.0",
 		"svelte": "^5.53.6",
 		"tailwindcss": "^4.2.4",
 		"typescript": "^5.9.3",
